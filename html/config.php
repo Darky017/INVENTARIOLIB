@@ -75,4 +75,13 @@ try {
 } catch (PDOException $e) {
     die("Error de conexión: " . $e->getMessage());
 }
+
+// --- FUNCIÓN DE AUDITORÍA ---
+function registrar_auditoria($pdo, $usuario_id, $accion, $descripcion, $tabla, $id_registro) {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    $stmt = $pdo->prepare("INSERT INTO auditoria (usuario_id, accion, descripcion, tabla_afectada, id_registro_afectado, ip_usuario) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$usuario_id, $accion, $descripcion, $tabla, $id_registro, $ip]);
+}
+
+$usuario_id = $_SESSION['superusuario']['id'] ?? null;
 ?>

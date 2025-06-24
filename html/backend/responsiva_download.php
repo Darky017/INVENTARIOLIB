@@ -31,5 +31,11 @@ header('Cache-Control: must-revalidate');
 header('Pragma: public');
 header('Content-Length: ' . filesize($ruta));
 readfile($ruta);
+
+// Registrar auditoría
+session_start();
+$usuario_id = $_SESSION['usuario_id']; // Asegúrate de tener el ID del usuario en la sesión
+registrar_auditoria($pdo, $usuario_id, 'descarga', 'Descargó la responsiva', 'responsivas', $id);
+
 exit;
 ?>

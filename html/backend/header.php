@@ -147,7 +147,7 @@ $fecha_creacion = ($fecha_creacion && strtotime($fecha_creacion) > 0)
     });
 
     // Auto logout tras inactividad
-    const tiempoInactivo = 300000; // 5 minutos
+    const tiempoInactivo = 600000; // 5 minutos
     let temporizador = setTimeout(() => window.location.href = 'logout.php', tiempoInactivo); // <- CAMBIO AQUÍ
 
     const reiniciarTemporizador = () => {

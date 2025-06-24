@@ -282,6 +282,28 @@
     </div>
 </div>
 
+<div class="dashboard-card" onclick="toggleOptions(this)">
+    <i class="fas fa-history"></i>
+    <h3>Historial</h3>
+    <div class="card-options">
+        <a href="auditoria_list.php">Ver Historial</a>
+    </div>
+</div>
+<div class="dashboard-card" onclick="toggleOptions(this)">
+    <i class="fas fa-history"></i>
+    <h3>Historial</h3>
+    <div class="card-options">
+        <a href="historial_asignaciones.php">Ver Historial</a>
+    </div>
+</div>
+<div class="dashboard-card" onclick="toggleOptions(this)">
+    <i class="fas fa-history"></i>
+    <h3>Reposiciones</h3>
+    <div class="card-options">
+        <a href="reposiciones_equipos.php">Reponer Equipo</a>
+    </div>
+</div>
+
 <script>
     function toggleOptions(card) {
         document.querySelectorAll('.dashboard-card').forEach(c => {

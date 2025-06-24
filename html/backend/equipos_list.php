@@ -198,6 +198,9 @@ $usuarios = $pdo->query("SELECT id, primer_nombre, apellido_paterno FROM usuario
                                         <a class="dropdown-item text-success" href="equipos_edit.php?id=<?= $equipo['id']; ?>">
                                             <i class="fas fa-edit"></i> Editar
                                         </a>
+                                        <a class="dropdown-item text-warning" href="historial_equipo.php?id=<?= $equipo['id']; ?>&tipo=computo">
+                                            <i class="fas fa-history"></i> Ver historial
+                                        </a>
                                         <a class="dropdown-item text-danger" href="equipos_delete.php?id=<?= $equipo['id']; ?>">
                                             <i class="fas fa-trash-alt"></i> Eliminar
                                         </a>

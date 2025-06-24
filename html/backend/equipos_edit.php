@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../config.php';
+require_once 'funciones_historial.php';
 
 // Verificar si se recibió un ID válido
 if (!isset($_GET['id'])) {
@@ -40,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (empty($errors)) {
+        // Guardar usuario anterior para comparar
+        $usuario_anterior = $equipo['usuario'];
+        $superusuario_id = $_SESSION['superusuario']['id'] ?? null;
+
         $stmt = $pdo->prepare("UPDATE equipo_computo SET 
             usuario = :usuario, 
             departamento = :departamento,
@@ -62,6 +67,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'estado_pc' => $estado_pc,
             'id' => $id
         ]);
+
+        // Manejar cambios en el historial de asignaciones
+        if ($usuario_anterior != $usuario_id) {
+            // Si había un usuario asignado anteriormente, registrar la desasignación
+            if (!empty($usuario_anterior)) {
+                registrar_desasignacion($pdo, $id, 'computo', 'Cambio de asignación', $superusuario_id);
+            }
+            
+            // Si se asignó un nuevo usuario, registrar la nueva asignación
+            if (!empty($usuario_id)) {
+                registrar_asignacion(
+                    $pdo, 
+                    $id, 
+                    $usuario_id, 
+                    'computo', 
+                    $departamento, 
+                    'Reasignación de equipo', 
+                    $superusuario_id
+                );
+            }
+        }
+
+        if ($estado_pc == 'Repuesto' || $estado_pc == 'Reemplazado') {
+            registrar_auditoria($pdo, $superusuario_id, 'reposicion', 'Cambio de estado a ' . $estado_pc, 'equipo_computo', $id);
+        }
 
         header("Location: equipos_list.php");
         exit();

@@ -4,6 +4,7 @@ session_start();
 
 require_once '../config.php';
 require_once 'header.php';
+require_once 'funciones_historial.php';
 
 // Obtener usuarios para el combobox
 $stmt = $pdo->query("SELECT id, primer_nombre, apellido_paterno FROM usuarios ORDER BY primer_nombre");
@@ -76,6 +77,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
              'estado_pc' => $estado_pc
          ]);
 
+         $equipo_id = $pdo->lastInsertId();
+         $usuario_id = $_SESSION['superusuario']['id'] ?? null;
+         if ($usuario_id !== null) {
+             registrar_auditoria($pdo, $usuario_id, 'Añadir Equipo', 'Nuevo Equipo Añadido', 'equipo_computo', $equipo_id);
+         }
+
+         // Registrar en el historial si se asignó un usuario
+         if (!empty($usuario_asignado)) {
+             registrar_asignacion(
+                 $pdo, 
+                 $equipo_id, 
+                 $usuario_asignado, 
+                 'computo', 
+                 $departamento, 
+                 'Asignación inicial del equipo', 
+                 $usuario_id
+             );
+         }
 
         ob_end_clean(); // Limpiar el buffer antes de la redirección
         header("Location: equipos_list.php");
